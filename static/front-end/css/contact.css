@@ -1,0 +1,18 @@
+.contact-us-section .contact_sect_address span{
+    position: relative;
+    margin-left: 20px;
+}
+
+.contact-us-section .contact_sect_address .fas {
+    color: #E47A2E;
+}
+
+.contact-us-section .contact-us {
+    background-color: #353535;
+    color: white;
+    transition: .4s;
+}
+
+.contact-us-section .contact-us:hover {
+    background-color: #E47A2E;
+}

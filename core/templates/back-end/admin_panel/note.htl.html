@@ -1,0 +1,48 @@
+ <!--                                                edit news editor model-->
+
+                                                <button type="button" data-toggle="modal"
+                                                        data-target="#edit_logo{{logo.pk}}"
+                                                        style="width: auto; border: none; cursor: pointer; outline: none;background:  #3399FF; color: white;">
+                                                    Edit
+                                                </button>
+
+                                                                                                <!-- Modal -->
+                                                <div class="modal fade" id="edit_logo{{logo.pk}}" tabindex="-1"
+                                                     role="dialog" aria-labelledby="exampleModalLabel"
+                                                     aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLabel">Edit Logo</h5>
+                                                                <button type="button" class="close" data-dismiss="modal"
+                                                                        aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <form action="{% url 'apEditSiteLogo' logo_id=logo.pk %}"
+                                                                      method="post" enctype="multipart/form-data">
+                                                                    {% csrf_token %}
+                                                                    <div class="form-group row">
+                                                                        <div class="col-6">
+                                                                            <label for="cat_name">Upload Logo</label>
+                                                                        <input type="file" name="edit_site_logo" class="form-control" required>
+                                                                        </div>
+                                                                        <div class="col-6">
+                                                                            <img src="{{logo.logo.url}}" style="width: 80px; height: 80px; border-radius: 50%;" alt="">
+                                                                        </div>
+                                                                    </div>
+                                                                    <button type="submit" class="btn btn-primary">Save
+                                                                        changes
+                                                                    </button>
+                                                                </form>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary"
+                                                                        data-dismiss="modal">Cancel
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+<!-- edit news editor model ends -->

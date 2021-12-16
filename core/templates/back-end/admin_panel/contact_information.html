@@ -1,0 +1,379 @@
+{% extends 'back-end/admin_panel/index.html' %}
+{% load static %}
+
+{% block main-block %}
+
+
+<!-- begin app-main -->
+<div class="app-main" id="main">
+    <!-- begin container-fluid -->
+    <div class="container-fluid">
+        <!-- begin row -->
+
+        <!--            django message framework-->
+        <div class="row">
+            <div class="col-xl-3"></div>
+            <div class="col-xl-6">
+                {% if messages %}
+                {% for message in messages %}
+
+                <div {% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissible fade show" {% endif %} role="alert">
+                    <strong>{{ message }}!</strong>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                {% endfor %}
+                {% endif %}
+            </div>
+            <div class="col-xl-3"></div>
+        </div>
+
+        <!--            django message framework ends-->
+
+        <div class="row">
+            <div class="col-xl-6">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="card card-statistics">
+                            <div class="card-header">
+                                <div class="card-heading">
+                                    <h4 class="card-title">Add Site Contact Information in Bangla</h4>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <form action="{% url 'apAddSiteContactInfoBangla' %}" method="POST" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <div class="form-row">
+                                        <div class="form-group col-md-7">
+                                            <input type="text" name="mobile_no" class="form-control" id="inputCity"
+                                                   placeholder="Enter Phone No." required> <br>
+                                            <input type="email" name="email" class="form-control" id="inputCity"
+                                                   placeholder="Email" required><br>
+                                            <input type="text" name="address" class="form-control" id="inputCity"
+                                                   placeholder="Address" required><br>
+                                        </div>
+                                    </div>
+                                    {% if siteContactInforListBangla %}
+                                    <button type="submit" class="btn btn-primary" disabled>Disabled</button>
+                                    {% else %}
+                                    <button type="submit" class="btn btn-primary">Add Now</button>
+                                    {% endif %}
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-12">
+                        <div class="card card-statistics">
+                            <div class="card-header">
+                                <div class="card-heading">
+                                    <h4 class="card-title">Site Contact Informations In Bangla</h4>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-success mb-0">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col" class="text-center">#</th>
+                                            <th scope="col" class="text-center">Name</th>
+                                            <th scope="col" class="text-center">Email</th>
+                                            <th scope="col" class="text-center">Address</th>
+                                            <th scope="col" class="text-center">Action</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% if siteContactInforListBangla %}
+                                        {% for contact_info in siteContactInforListBangla %}
+                                        <tr>
+                                            <th scope="row" class="text-center">{{forloop.counter}}</th>
+                                            <td class="text-center">{{contact_info.phone}}</td>
+                                            <td class="text-center">{{contact_info.email}}</td>
+                                            <td class="text-center">{{contact_info.address}}</td>
+                                            <td class="text-center">
+
+                                                <!--                                        delete modal-->
+                                                <button type="button" data-toggle="modal"
+                                                        data-target="#deleteModal{{contact_info.pk}}"
+                                                        style="width: auto; border: none; cursor: pointer; outline: none;background:   #FF0000; color: white;">
+                                                    Delete
+                                                </button>
+
+                                                 <!-- Modal -->
+                                                <div class="modal fade" id="deleteModal{{contact_info.pk}}" tabindex="-1"
+                                                     role="dialog"
+                                                     aria-labelledby="deleteModal{{contact_info.pk}}" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <p class="modal-title" id="exampleModalLabel">Are you
+                                                                    sure want to delete this informations?</p>
+                                                                <button type="button" class="close" data-dismiss="modal"
+                                                                        aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary"
+                                                                        data-dismiss="modal">No
+                                                                </button>
+                                                                <a href="{% url 'apDeleteSiteContactInfoBangla' pk=contact_info.pk %}">
+                                                                    <button type="button" class="btn btn-primary">Yes
+                                                                    </button>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!--                                        delete modal ends-->
+
+
+                                                <button type="button" data-toggle="modal"
+                                                        data-target="#edit_contactInfoBangla{{contact_info.pk}}"
+                                                        style="width: auto; border: none; cursor: pointer; outline: none;background:  #3399FF; color: white;">
+                                                    Edit
+                                                </button>
+
+                                                  <!--                                        edit modal-->
+
+                                                <!-- Modal -->
+                                                <div class="modal fade" id="edit_contactInfoBangla{{contact_info.pk}}" tabindex="-1"
+                                                     role="dialog" aria-labelledby="exampleModalLabel"
+                                                     aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLabel">Update Contact Info</h5>
+                                                                <button type="button" class="close" data-dismiss="modal"
+                                                                        aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <form action="{% url 'apEditSiteContactInfoBangla' pk=contact_info.pk %}"
+                                                                      method="post" enctype="multipart/form-data">
+                                                                    {% csrf_token %}
+                                                                    <div class="form-group">
+                                                                        <input type="text" name="edit_phone" value="{{contact_info.phone}}" class="form-control" required>
+                                                                        <br>
+                                                                        <input type="email" name="edit_email" value="{{contact_info.email}}" class="form-control" required>
+                                                                        <br>
+                                                                        <input type="text" name="edit_address" value="{{contact_info.address}}" class="form-control" required>
+                                                                        <br>
+                                                                    </div>
+                                                                    <button type="submit" class="btn btn-primary">Save
+                                                                        changes
+                                                                    </button>
+                                                                </form>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary"
+                                                                        data-dismiss="modal">Cancel
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                                <!--                                        edit modal-->
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                        {% else %}
+                                        <h3 class="text-center">Contact Info not added yet!</h3>
+                                        {% endif %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="card card-statistics">
+                            <div class="card-header">
+                                <div class="card-heading">
+                                    <h4 class="card-title">Add Site Contact Information In English</h4>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <form action="{% url 'apAddSiteContactInfo' %}" method="POST" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <div class="form-row">
+                                        <div class="form-group col-md-7">
+                                            <input type="number" name="mobile_no" class="form-control" id="inputCity"
+                                                   placeholder="Enter Phone No." required> <br>
+                                            <input type="email" name="email" class="form-control" id="inputCity"
+                                                   placeholder="Email" required><br>
+                                            <input type="text" name="address" class="form-control" id="inputCity"
+                                                   placeholder="Address" required><br>
+                                        </div>
+                                    </div>
+                                    {% if siteContactInforList %}
+                                    <button type="submit" class="btn btn-primary" disabled>Disabled</button>
+                                    {% else %}
+                                    <button type="submit" class="btn btn-primary">Add Now</button>
+                                    {% endif %}
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-12">
+                        <div class="card card-statistics">
+                            <div class="card-header">
+                                <div class="card-heading">
+                                    <h4 class="card-title">Site Contact Informations</h4>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-success mb-0">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col" class="text-center">#</th>
+                                            <th scope="col" class="text-center">Name</th>
+                                            <th scope="col" class="text-center">Email</th>
+                                            <th scope="col" class="text-center">Address</th>
+                                            <th scope="col" class="text-center">Action</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% if siteContactInforList %}
+                                        {% for contact_info in siteContactInforList %}
+                                        <tr>
+                                            <th scope="row" class="text-center">{{forloop.counter}}</th>
+                                            <td class="text-center">{{contact_info.phone}}</td>
+                                            <td class="text-center">{{contact_info.email}}</td>
+                                            <td class="text-center">{{contact_info.address}}</td>
+                                            <td class="text-center">
+
+                                                <!--                                        delete modal-->
+                                                <button type="button" data-toggle="modal"
+                                                        data-target="#deleteModal{{contact_info.pk}}"
+                                                        style="width: auto; border: none; cursor: pointer; outline: none;background:   #FF0000; color: white;">
+                                                    Delete
+                                                </button>
+
+                                                 <!-- Modal -->
+                                                <div class="modal fade" id="deleteModal{{contact_info.pk}}" tabindex="-1"
+                                                     role="dialog"
+                                                     aria-labelledby="deleteModal{{contact_info.pk}}" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <p class="modal-title" id="exampleModalLabel">Are you
+                                                                    sure want to delete this informations?</p>
+                                                                <button type="button" class="close" data-dismiss="modal"
+                                                                        aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary"
+                                                                        data-dismiss="modal">No
+                                                                </button>
+                                                                <a href="{% url 'apDelSiteContactInfo' contact_id=contact_info.pk %}">
+                                                                    <button type="button" class="btn btn-primary">Yes
+                                                                    </button>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!--                                        delete modal ends-->
+
+
+                                                <button type="button" data-toggle="modal"
+                                                        data-target="#edit_contactInfo{{contact_info.pk}}"
+                                                        style="width: auto; border: none; cursor: pointer; outline: none;background:  #3399FF; color: white;">
+                                                    Edit
+                                                </button>
+
+                                                  <!--                                        edit modal-->
+
+                                                <!-- Modal -->
+                                                <div class="modal fade" id="edit_contactInfo{{contact_info.pk}}" tabindex="-1"
+                                                     role="dialog" aria-labelledby="exampleModalLabel"
+                                                     aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLabel">Update Contact Info</h5>
+                                                                <button type="button" class="close" data-dismiss="modal"
+                                                                        aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <form action="{% url 'apEditSiteContactInfo' contact_id=contact_info.pk %}"
+                                                                      method="post" enctype="multipart/form-data">
+                                                                    {% csrf_token %}
+                                                                    <div class="form-group">
+                                                                        <input type="number" name="edit_phone"
+                                                                               value="{{contact_info.phone}}"
+                                                                               class="form-control"><br>
+                                                                        <input type="email" name="edit_email"
+                                                                               value="{{contact_info.email}}"
+                                                                               class="form-control"><br>
+                                                                        <input type="text" name="edit_address"
+                                                                               value="{{contact_info.address}}"
+                                                                               class="form-control"><br>
+                                                                    </div>
+                                                                    <button type="submit" class="btn btn-primary">Save
+                                                                        changes
+                                                                    </button>
+                                                                </form>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary"
+                                                                        data-dismiss="modal">Cancel
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                                <!--                                        edit modal-->
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                        {% else %}
+                                        <h3 class="text-center">Contact Info not added yet!</h3>
+                                        {% endif %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+    </div>
+    <!-- end container-fluid -->
+</div>
+
+
+<script>
+    const newsIMG = document.getElementById('upload-site-logo');
+    const img_preview = document.getElementById('logo-preview');
+
+
+    newsIMG.onchange = () =>{
+    let img_url = URL.createObjectURL(newsIMG.files[0]);
+    img_preview.src = img_url;
+    };
+
+</script>
+
+<!-- end app-main -->
+{% endblock %}

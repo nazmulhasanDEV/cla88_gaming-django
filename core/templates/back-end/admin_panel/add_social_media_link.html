@@ -1,0 +1,221 @@
+{% extends 'back-end/admin_panel/index.html' %}
+{% load static %}
+
+{% block main-block %}
+
+
+<!-- begin app-main -->
+<div class="app-main" id="main">
+    <!-- begin container-fluid -->
+    <div class="container-fluid">
+        <!-- begin row -->
+
+        <!--            django message framework-->
+        <div class="row">
+            <div class="col-xl-3"></div>
+            <div class="col-xl-6">
+                {% if messages %}
+                {% for message in messages %}
+
+                <div {% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissible fade show" {% endif %} role="alert">
+                    <strong>{{ message }}!</strong>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                {% endfor %}
+                {% endif %}
+            </div>
+            <div class="col-xl-3"></div>
+        </div>
+
+        <!--            django message framework ends-->
+
+        <div class="row">
+            <div class="col-xl-3"></div>
+            <div class="col-xl-6">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="card card-statistics">
+                            <div class="card-header">
+                                <div class="card-heading">
+                                    <h4 class="card-title">Add Social Media Link</h4>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <form action="{% url 'apAddSocialMediaLink' %}" method="POST" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <div class="form-row">
+                                        <div class="form-group col-md-7">
+                                            <input type="url" name="fb_link" class="form-control" id="inputCity"
+                                                   placeholder="Ex: www.facebook.com/channelt24"> <br>
+                                            <input type="url" name="tw_link" class="form-control" id="inputCity"
+                                                   placeholder="Ex: www.twitter.com/channelt24"><br>
+                                            <input type="url" name="insta_link" class="form-control" id="inputCity"
+                                                   placeholder="Ex: www.instagram.com/channelt24"><br>
+                                            <input type="url" name="linkIn_link" class="form-control" id="inputCity"
+                                                   placeholder="Ex: www.linkedin.com/channelt24"><br>
+                                        </div>
+                                    </div>
+                                    {% if siteContactInforList %}
+                                    <button type="submit" class="btn btn-primary" disabled>Disabled</button>
+                                    {% else %}
+                                    <button type="submit" class="btn btn-primary">Add Now</button>
+                                    {% endif %}
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-12">
+                        <div class="card card-statistics">
+                            <div class="card-header">
+                                <div class="card-heading">
+                                    <h4 class="card-title">Social Media Links</h4>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-success mb-0">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col" class="text-center">#</th>
+                                            <th scope="col" class="text-center">Facebook</th>
+                                            <th scope="col" class="text-center">Twitter</th>
+                                            <th scope="col" class="text-center">Instagram</th>
+                                            <th scope="col" class="text-center">LinkedIn</th>
+                                            <th scope="col" class="text-center">Action</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% if social_media_links %}
+                                        <tr>
+                                            <th scope="row" class="text-center">1</th>
+                                           <td class="text-center">{{social_media_links.fb}}</td>
+                                           <td class="text-center">{{social_media_links.tw}}</td>
+                                           <td class="text-center">{{social_media_links.insgrm}}</td>
+                                           <td class="text-center">{{social_media_links.linkedin}}</td>
+                                            <td class="text-center">
+
+                                                <!--                                        delete modal-->
+                                                <button type="button" data-toggle="modal"
+                                                        data-target="#deleteModal{{social_media_links.pk}}"
+                                                        style="width: auto; border: none; cursor: pointer; outline: none;background:   #FF0000; color: white;">
+                                                    Delete
+                                                </button>
+
+                                                 <!-- Modal -->
+                                                <div class="modal fade" id="deleteModal{{social_media_links.pk}}" tabindex="-1"
+                                                     role="dialog"
+                                                     aria-labelledby="deleteModal{{social_media_links.pk}}" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <p class="modal-title" id="exampleModalLabel">Are you
+                                                                    sure want to delete this informations?</p>
+                                                                <button type="button" class="close" data-dismiss="modal"
+                                                                        aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary"
+                                                                        data-dismiss="modal">No
+                                                                </button>
+                                                                <a href="{% url 'apDelSocialMediaLink' pk=social_media_links.pk %}">
+                                                                    <button type="button" class="btn btn-primary">Yes
+                                                                    </button>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!--                                        delete modal ends-->
+
+
+                                                <button type="button" data-toggle="modal"
+                                                        data-target="#edit_contactInfo{{social_media_links.pk}}"
+                                                        style="width: auto; border: none; cursor: pointer; outline: none;background:  #3399FF; color: white;">
+                                                    Edit
+                                                </button>
+
+                                                  <!--                                        edit modal-->
+
+                                                <!-- Modal -->
+                                                <div class="modal fade" id="edit_contactInfo{{social_media_links.pk}}" tabindex="-1"
+                                                     role="dialog" aria-labelledby="exampleModalLabel"
+                                                     aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLabel">Update Contact Info</h5>
+                                                                <button type="button" class="close" data-dismiss="modal"
+                                                                        aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                 <form action="{% url 'apEditSocialMediaLink' pk=social_media_links.pk %}" method="POST" enctype="multipart/form-data">
+                                                                        {% csrf_token %}
+                                                                        <div class="form-row">
+                                                                            <div class="form-group col-md-7">
+                                                                                <input type="url" name="fb_link" value="{{social_media_links.fb}}"  class="form-control" id="inputCity"> <br>
+                                                                                <input type="url" name="tw_link" value="{{social_media_links.tw}}"  class="form-control" id="inputCity"><br>
+                                                                                <input type="url" name="insta_link" value="{{social_media_links.insgrm}}"  class="form-control" id="inputCity"><br>
+                                                                                <input type="url" name="linkIn_link" value="{{social_media_links.linkedin}}"  class="form-control" id="inputCity"><br>
+                                                                            </div>
+                                                                        </div>
+                                                                        {% if siteContactInforList %}
+                                                                        <button type="submit" class="btn btn-primary" disabled>Disabled</button>
+                                                                        {% else %}
+                                                                        <button type="submit" class="btn btn-primary">Add Now</button>
+                                                                        {% endif %}
+                                                                    </form>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary"
+                                                                        data-dismiss="modal">Cancel
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                                <!--                                        edit modal-->
+                                            </td>
+                                        </tr>
+                                        {% else %}
+                                        <h3 class="text-center">Contact Info not added yet!</h3>
+                                        {% endif %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3"></div>
+        </div>
+        <!-- end row -->
+    </div>
+    <!-- end container-fluid -->
+</div>
+
+
+<script>
+    const newsIMG = document.getElementById('upload-site-logo');
+    const img_preview = document.getElementById('logo-preview');
+
+
+    newsIMG.onchange = () =>{
+    let img_url = URL.createObjectURL(newsIMG.files[0]);
+    img_preview.src = img_url;
+    };
+
+</script>
+
+<!-- end app-main -->
+{% endblock %}

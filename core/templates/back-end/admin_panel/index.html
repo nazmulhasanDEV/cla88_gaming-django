@@ -1,0 +1,249 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Admin Dashboard</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="Admin template that can be used to build dashboards for CRM, CMS, etc." />
+    <meta name="author" content="admin dashboard" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- app favicon -->
+    <link rel="shortcut icon" href="{% static 'back-end/adminPanel/assets/img/favicon.ico' %}">
+    <!-- google fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+    <!-- plugin stylesheets -->
+    <link rel="stylesheet" type="text/css" href="{% static 'back-end/adminPanel/assets/css/vendors.css' %}" />
+    <!-- app style -->
+    <link rel="stylesheet" type="text/css" href="{% static 'back-end/adminPanel/assets/css/style.css' %}" />
+
+<!--    ajax.js file -->
+    <script src="{%static 'back-end/adminPanel/assets/js/ajax.js' %}" defer></script>
+
+<!--    ckeditor part -->
+    <script type="text/javascript" src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
+   <script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
+
+</head>
+
+<body>
+    <!-- begin app -->
+    <div class="app">
+        <!-- begin app-wrap -->
+        <div class="app-wrap">
+            <!-- begin pre-loader -->
+            <div class="loader">
+                <div class="h-100 d-flex justify-content-center">
+                    <div class="align-self-center">
+                        <img src="{% static 'back-end/adminPanel/assets/img/loader/loader.svg' %}" alt="loader">
+                    </div>
+                </div>
+            </div>
+            <!-- end pre-loader -->
+            <!-- begin app-header -->
+            <header class="app-header top-bar">
+                <!-- begin navbar -->
+                <nav class="navbar navbar-expand-md">
+
+                    <!-- begin navbar-header -->
+                    <div class="navbar-header d-flex align-items-center">
+                        <a href="javascript:void:(0)" class="mobile-toggle"><i class="ti ti-align-right"></i></a>
+                        <a class="navbar-brand" href="/ap/home">
+                            {% if site_logo %}
+                            <img src="{{site_logo.logo.url}}" width="100%;" style="position: relative; left: -10px; " alt="loader">
+                            {% else %}
+                            <img src="{% static 'back-end/adminPanel/assets/img/loader/loader.svg' %}" alt="loader">
+                            {% endif %}
+
+                        </a>
+                    </div>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="ti ti-align-left"></i>
+                    </button>
+                    <!-- end navbar-header -->
+
+                    <!-- begin navigation -->
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <div class="navigation d-flex">
+                            <ul class="navbar-nav nav-left">
+                                <li class="nav-item">
+                                    <a href="javascript:void(0)" class="nav-link sidebar-toggle">
+                                        <i class="ti ti-align-right"></i>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item full-screen d-none d-lg-block" id="btnFullscreen">
+                                    <a href="javascript:void(0)" class="nav-link expand">
+                                        <i class="icon-size-fullscreen"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul class="navbar-nav nav-right ml-auto">
+
+                                <li class="nav-item">
+                                    <a class="nav-link search" href="javascript:void(0)">
+                                        <i class="ti ti-search"></i>
+                                    </a>
+                                    <div class="search-wrapper">
+                                        <div class="close-btn">
+                                            <i class="ti ti-close"></i>
+                                        </div>
+                                        <div class="search-content">
+                                            <form>
+                                                <div class="form-group">
+                                                    <i class="ti ti-search magnifier"></i>
+                                                    <input type="text" class="form-control autocomplete" placeholder="Search Here" id="autocomplete-ajax" autofocus="autofocus">
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="nav-item dropdown user-profile">
+                                    <a href="javascript:void(0)" class="nav-link dropdown-toggle " id="navbarDropdown4" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        {% if userProfile %}
+                                        <img src="{{userProfile.profile_pic.url}}" alt="avtar-img">
+                                        {% else %}
+                                        <img src="{% static 'back-end/adminPanel/assets/img/avtar/02.jpg' %}" alt="avtar-img">
+                                        {% endif %}
+                                        <span class="bg-success user-status"></span>
+                                    </a>
+                                    <div class="dropdown-menu animated fadeIn" aria-labelledby="navbarDropdown">
+                                        <div class="bg-gradient px-4 py-3">
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <div class="mr-1">
+                                                    <h4 class="text-white mb-0">{{userProfile.user.name}}</h4>
+                                                    <small class="text-white">{{userProfile.user.email}}</small>
+                                                </div>
+                                                <a href="{% url 'apLogout' %}" class="text-white font-20 tooltip-wrapper" data-toggle="tooltip" data-placement="top" title="" data-original-title="Logout"> <i
+                                                                class="zmdi zmdi-power"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="p-4">
+                                            <a class="dropdown-item d-flex nav-link" href="/ap/user/profile">
+                                                <i class="fa fa-user pr-2 text-success"></i> Profile</a>
+
+                                            <a class="dropdown-item d-flex nav-link" href="/ap/user/profile">
+                                                <i class=" ti ti-settings pr-2 text-info"></i> Settings
+                                            </a>
+                                            <a class="dropdown-item d-flex nav-link" href="{% url 'apLogout' %}">
+                                                <i class="zmdi zmdi-power"></i> Logout
+                                            </a>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- end navigation -->
+                </nav>
+                <!-- end navbar -->
+            </header>
+            <!-- end app-header -->
+
+            <!-- begin app-container -->
+            <div class="app-container">
+                <!-- begin app-nabar -->
+                <aside class="app-navbar">
+                    <!-- begin sidebar-nav -->
+                    <div class="sidebar-nav scrollbar scroll_light">
+                        <ul class="metismenu " id="sidebarNav">
+                            <li class="nav-static-title">Personal</li>
+                            <li class="active">
+                                <a class="has-arrow" href="/" target="_blank" aria-expanded="false">
+                                    <i class="nav-icon ti ti-rocket"></i>
+                                    <span class="nav-title">Go To Website</span>
+                                </a>
+                                <a class="has-arrow" href="/ap/home" aria-expanded="false">
+                                    <i class="nav-icon fa fa-dashboard"></i>
+                                    <span class="nav-title">Dashboard</span>
+                                </a>
+                            </li>
+
+                            <li class="nav-static-title">Content Setting</li>
+                            <li>
+                                <a class="has-arrow" href="#" aria-expanded="false"> <i class="nav-icon ti ti-layout-grid4-alt"></i> <span class="nav-title">Content</span> </a>
+                                <ul aria-expanded="false">
+                                    <li> <a href="/ap/add/header/banner">Add Banner</a></li>
+                                    <li><a href="/ap/add/header/right/icon">Add Header Right Icon</a></li>
+                                    <li> <a href="/ap/add/header/banner/slider">Add Slider Below Banner</a></li>
+                                    <li> <a href="/ap/add/welcome/banner">Add Welcome Banner</a></li>
+                                    <li> <a href="/ap/add/welcome/banner/slider/one">Welcome Banner Slider One</a></li>
+                                    <li> <a href="/ap/add/welcome/banner/slider/two">Welcome Banner Slider Two</a></li>
+                                    <li> <a href="/ap/add/how/to/play/banner">Add How To Play Banner</a></li>
+                                    <li> <a href="/ap/add/min/max/withdraw/amnt">Minimum & Maximum Withdraw Amount Banner</a></li>
+                                    <li> <a href="/ap/add/gallery/bel/withraw/banner">Gallery Below Withdraw Banner</a></li>
+                                    <li> <a href="/ap/add/gallery/games">Add Gallery Games Banner</a></li>
+                                    <li> <a href="/ap/add/payment/method">Add Payment Method Banner</a></li>
+                                </ul>
+                            </li>
+
+
+                                                        <!-- Site Setting -->
+                            <li class="nav-static-title">Site Settings</li>
+                            <li>
+                                <a class="has-arrow" href="#" aria-expanded="false"> <i class="nav-icon ti ti-layout-grid4-alt"></i> <span class="nav-title">Settings</span> </a>
+                                <ul aria-expanded="false">
+                                    <li> <a href="/ap/add/site/logo">Site Logo</a></li>
+                                    <li><a href="/ap/add/social/media/link">Social Media Link</a></li>
+                                    <li> <a href="/ap/add/site/contact/info/">Contact Information</a></li>
+                                    <li> <a href="/ap/news/about/us">About Us</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a class="has-arrow" href="#" aria-expanded="false"> <i class="nav-icon ti ti-layout-grid4-alt"></i> <span class="nav-title">Visitor Message</span> </a>
+                                <ul aria-expanded="false">
+                                    <li> <a href="/ap/visitor/msg/list">Message</a></li>
+                                </ul>
+                            </li>
+
+<!--                            News Category & Sub-category section ends -->
+
+                            <!-- profile Setting -->
+                            <li class="nav-static-title">Profile Settings</li>
+                            <li>
+                                <a class="has-arrow" href="#" aria-expanded="false"> <i class="nav-icon ti ti-layout-grid4-alt"></i> <span class="nav-title">All Settings</span> </a>
+                                <ul aria-expanded="false">
+                                    <li> <a href="/ap/user/profile">My Profile</a></li>
+                                </ul>
+                            </li>
+
+<!--                            News Category & Sub-category section ends -->
+
+                        </ul>
+                    </div>
+                    <!-- end sidebar-nav -->
+                </aside>
+                <!-- end app-navbar -->
+                <!-- begin app-main -->
+                {% block main-block %}
+                {% endblock %}
+                <!-- end app-main -->
+            </div>
+            <!-- end app-container -->
+
+
+            <!-- begin footer -->
+            <footer class="footer">
+                <div class="row">
+                    <div class="col-12 col-sm-6 text-center text-sm-left">
+                        <p>&copy; Copyright 2021. All rights reserved || Soroborno.com</p>
+                    </div>
+                </div>
+            </footer>
+            <!-- end footer -->
+        </div>
+        <!-- end app-wrap -->
+    </div>
+    <!-- end app -->
+
+    <!-- plugins -->
+    <script src="{% static 'back-end/adminPanel/assets/js/vendors.js' %}"></script>
+
+    <!-- custom app -->
+    <script src="{% static 'back-end/adminPanel/assets/js/app.js' %}"></script>
+
+</body>
+
+
+</html>

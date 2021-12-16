@@ -1,0 +1,167 @@
+{% extends 'back-end/admin_panel/index.html' %}
+{% load static %}
+
+{% block main-block %}
+
+
+<!-- begin app-main -->
+<div class="app-main" id="main">
+    <!-- begin container-fluid -->
+    <div class="container-fluid">
+        <!-- begin row -->
+
+        <!--            django message framework-->
+        <div class="row">
+            <div class="col-xl-3"></div>
+            <div class="col-xl-6">
+                {% if messages %}
+                {% for message in messages %}
+
+                <div {% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissible fade show" {% endif %} role="alert">
+                    <strong>{{ message }}!</strong>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                {% endfor %}
+                {% endif %}
+            </div>
+            <div class="col-xl-3"></div>
+        </div>
+
+        <!--            django message framework ends-->
+
+        <div class="row">
+            <div class="col-xl-3"></div>
+            <div class="col-xl-6">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="card card-statistics">
+                            <div class="card-header">
+                                <div class="card-heading">
+                                    <h4 class="card-title">Add Gallery Below Withdraw Amount Banner</h4>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <form action="{%url 'apAddGalleryBelowWithdrawBanner' %}" method="POST" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="upload-site-logo">Add Gallery Below Withdraw Amount Banner</label>
+                                            <input type="file" name="galleryBnr" class="form-control" id="upload-site-logo"
+                                                   placeholder="Add Header Banner" required>
+
+                                            <label for="upload-site-logo">Add url/link</label>
+                                            <input type="text" name="url" class="form-control" id="upload-site-logo"
+                                                   placeholder="Add link: www.example.com">
+
+                                        </div>
+
+                                        <div class="form-group col-md-6">
+                                            <img src="{% static 'back-end/adminPanel/assets/img/logo.png' %}" id="logo-preview" style="width: 100%;" alt="">
+                                        </div>
+
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Click To Add</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-12">
+                        <div class="card card-statistics">
+                            <div class="card-header">
+                                <div class="card-heading">
+                                    <h4 class="card-title">Gallery Below Withdraw Amount Banner List</h4>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-success mb-0">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col" class="text-center">#</th>
+                                            <th scope="col" class="text-center">Image</th>
+                                            <th scope="col" class="text-center">Action</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% if gallery_withdraw_bnr_list %}
+                                        {% for logo in gallery_withdraw_bnr_list %}
+                                        <tr>
+                                            <th scope="row" class="text-center">{{forloop.counter}}</th>
+                                            <td class="text-center"><img src="{{logo.img.url}}" style="width: 100px; height: 100px; border-radius: 50%;" alt=""></td>
+                                            <td class="text-center">
+
+                                                <!--                                        delete modal-->
+                                                <button type="button" data-toggle="modal"
+                                                        data-target="#deleteLogo{{logo.pk}}"
+                                                        style="width: auto; border: none; cursor: pointer; outline: none;background:   #FF0000; color: white;">
+                                                    Delete
+                                                </button>
+                                                 <!-- Modal -->
+                                                <div class="modal fade" id="deleteLogo{{logo.pk}}" tabindex="-1"
+                                                     role="dialog"
+                                                     aria-labelledby="deleteLogo{{logo.pk}}" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <p class="modal-title" id="exampleModalLabel">Are you
+                                                                    sure want
+                                                                    to delete this <strong><img src="{{logo.img.url}}" style="width: 50px; height: 50px; border-radius: 50%;" alt=""></strong> image?</p>
+                                                                <button type="button" class="close" data-dismiss="modal"
+                                                                        aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary"
+                                                                        data-dismiss="modal">No
+                                                                </button>
+                                                                <a href="{%url 'apDeleteGalleryBelWithdrawBnr' pk=logo.pk %}">
+                                                                    <button type="button" class="btn btn-primary">Yes
+                                                                    </button>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!--ends logo delete model -->
+
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                        {% else %}
+                                        <h3 class="text-center">Not added yet!</h3>
+                                        {% endif %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3"></div>
+        </div>
+        <!-- end row -->
+    </div>
+    <!-- end container-fluid -->
+</div>
+
+
+<script>
+    const newsIMG = document.getElementById('upload-site-logo');
+    const img_preview = document.getElementById('logo-preview');
+
+
+    newsIMG.onchange = () =>{
+    let img_url = URL.createObjectURL(newsIMG.files[0]);
+    img_preview.src = img_url;
+    };
+
+</script>
+
+<!-- end app-main -->
+{% endblock %}

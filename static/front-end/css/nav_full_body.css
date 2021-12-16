@@ -1,0 +1,80 @@
+.nav_full_body {
+    position: absolute;
+    max-width: 280px;
+    width: 280px;
+    height: 100%;
+    background: white;
+    z-index: 200000;
+    top: 0;
+    overflow-y: scroll;
+    display: none;
+}
+
+.nav_full_body nav {
+    position: relative;
+}
+
+.nav_full_body nav ul {
+    position: relative;
+    top: 40px;
+}
+
+.nav_full_body nav ul li {
+    list-style-type: none;
+    padding-top: 10px;
+    border-bottom: .5px solid #F7F7F7;
+}
+
+.nav_full_body nav ul li a {
+    text-decoration: none;
+    color: #353535;
+    font-weight: bold;
+}
+
+.nav_full_body nav button{
+    position: absolute;
+    right: 0;
+    outline: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+    z-index: 3;
+    top: 20px;
+}
+
+.show_full_navBar {
+    display: block;
+    animation: showFullNav 2s alternate;
+}
+
+.hide_full_navBar {
+    animation: hideFullNav 0.3s forwards;
+}
+
+@keyframes showFullNav {
+    0%{
+        width: 0%;
+    }
+    100% {
+        width: 100%;
+    }
+}
+
+
+@keyframes hideFullNav {
+    0%{
+        width: 100%;
+    }
+
+    100% {
+        width: 0%;
+    }
+}
+
+@media screen and (max-width: 991px) {
+    .nav-main-li {
+        visibility: hidden;
+    }
+}

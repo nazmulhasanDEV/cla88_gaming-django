@@ -1,0 +1,191 @@
+{% extends 'back-end/admin_panel/index.html' %}
+{% load static %}
+
+{% block main-block %}
+
+
+<!-- begin app-main -->
+<div class="app-main" id="main">
+    <!-- begin container-fluid -->
+    <div class="container-fluid">
+        <!-- begin row -->
+
+        <!--            django message framework-->
+        <div class="row">
+            <div class="col-xl-3"></div>
+            <div class="col-xl-6">
+                {% if messages %}
+                {% for message in messages %}
+
+                <div {% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissible fade show" {% endif %} role="alert">
+                    <strong>{{ message }}!</strong>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                {% endfor %}
+                {% endif %}
+            </div>
+            <div class="col-xl-3"></div>
+        </div>
+
+        <!--            django message framework ends-->
+
+
+        <!-- begin row -->
+        <div class="row">
+            <div class="col-md-12 m-b-30">
+                <!-- begin page title -->
+                <div class="d-block d-sm-flex flex-nowrap align-items-center">
+                    <div class="page-title mb-2 mb-sm-0">
+                        <h1>Account Settings</h1>
+                    </div>
+                    <div class="ml-auto d-flex align-items-center">
+                        <nav>
+                            <ol class="breadcrumb p-0 m-b-0">
+                                <li class="breadcrumb-item">
+                                    <a href="/ap/home"><i class="ti ti-home"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active text-primary" aria-current="page">Account Settings
+                                </li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+                <!-- end page title -->
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!--mail-Compose-contant-start-->
+        <div class="row account-contant">
+            <div class="col-12">
+                <div class="card card-statistics">
+                    <div class="card-body p-0">
+                        <div class="row no-gutters">
+                            <div class="col-xl-3 pb-xl-0 pb-5 border-right">
+                                <div class="page-account-profil pt-5">
+                                    <div class="profile-img text-center rounded-circle">
+                                        <div class="pt-5">
+                                            <div class="bg-img m-auto">
+                                                {% if userProfile %}
+                                                <img src="{{userProfile.profile_pic.url}}"
+                                                     class="img-fluid" alt="users-avatar" style="width: 100px; height: 100px; border-radius: 50%;">
+                                                {% else %}
+                                                <img src="{% static 'back-end/adminPanel/assets/img/avtar/02.jpg' %}"
+                                                     class="img-fluid" alt="users-avatar" style="width: 100px; height: 100px; border-radius: 50%;">
+                                                {% endif %}
+                                            </div>
+                                            <div class="profile pt-4">
+                                                <h4 class="mb-1">{{userProfile.user.name}}</h4>
+                                                {% if userProfile.user.is_admin %}
+                                                <p>Admin</p>
+                                                {% else %}
+                                                <p>Staff</p>
+                                                {% endif %}
+                                            </div>
+                                            <div class="profile pt-4">
+                                                <p><strong>Username:</strong> {{userProfile.user.username}}</p>
+                                                <p><strong>E-mail:</strong> {{userProfile.user.email}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-xl-5 col-md-6 col-12 border-t border-right">
+                                <div class="page-account-form">
+                                    <div class="form-titel border-bottom p-3">
+                                        <h5 class="mb-0 py-2">Edit Your Personal Settings</h5>
+                                    </div>
+                                    <div class="p-4">
+                                        <form action="{% url 'apChangeUserName' %}" enctype="multipart/form-data" method="post">
+                                            {% csrf_token %}
+                                            <div class="form-row">
+                                                <div class="form-group col-md-12">
+                                                    <label for="name1">Type Username to verify</label>
+                                                    <input type="text" name="username" class="form-control" id="name1" value="" placeholder="Username" required>
+                                                </div>
+                                                <div class="form-group col-md-12">
+                                                    <label for="phone1">Type New Name</label>
+                                                    <input type="text" name="new_name" class="form-control" id="phone1" placeholder="Name" required>
+                                                </div>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Update My Name</button>
+                                        </form>
+                                        <br><br><br>
+                                        <!--                                                        change password-->
+                                        <form action="{%url 'apChangeUserPassword' %}" enctype="multipart/form-data" method="post">
+                                            {% csrf_token %}
+                                            <div class="form-row">
+                                                <div class="form-group col-md-12">
+                                                    <label for="name1">Type Email to verify</label>
+                                                    <input type="text" name="email" class="form-control" id="name1" value=""
+                                                           placeholder="Type Email" required>
+                                                </div>
+                                                <div class="form-group col-md-12">
+                                                    <label for="phone1">Type Old Password</label>
+                                                    <input type="text" name="old_password" class="form-control" id="phone1" value=""
+                                                           placeholder="Type Old Password" required>
+                                                </div>
+                                                <div class="form-group col-md-12">
+                                                    <label for="phone1">Type New Password</label>
+                                                    <input type="text" name="new_password" class="form-control" id="phone1" value=""
+                                                           placeholder="Type New Password" required>
+                                                </div>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Update My Password</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4 col-md-6 border-t col-12">
+                                <div class="page-account-form">
+                                    <div class="form-titel border-bottom p-3">
+                                        <h5 class="mb-0 py-2">Change Profile Picture</h5>
+                                    </div>
+                                    <div class="p-4">
+                                        <form action="{%url 'apChangeUserProfilePic' %}" method="post" enctype="multipart/form-data">
+                                            {% csrf_token %}
+                                            <div class="form-group">
+                                                <div class="col-12">
+                                                    <label for="we">Update Profile Pic:</label>
+                                                    <input type="file" name="profile_pic" class="form-control" id="profile_pic" value=""
+                                                           accept="multipart/form-data" required>
+                                                </div>
+                                                <div class="col-7">
+                                                    <img src="{% static 'back-end/adminPanel/assets/img/avtar/01.jpg' %}"
+                                                         id="preview_pic" style="width: 100%;" alt="">
+                                                </div>
+
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Save & Update</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--mail-Compose-contant-end-->
+
+    </div>
+    <!-- end container-fluid -->
+</div>
+
+
+<script type="text/javascript">
+    const uploaded_file = document.getElementById('profile_pic');
+    const preview_pic = document.getElementById('preview_pic');
+    uploaded_file.onchange = ()=>{
+    let img_url = URL.createObjectURL(uploaded_file.files[0]);
+     preview_pic.src = img_url;
+ };
+</script>
+
+<!-- end app-main -->
+{% endblock %}

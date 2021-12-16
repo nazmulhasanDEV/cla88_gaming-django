@@ -1,0 +1,19 @@
+.breadcumbs nav ol{
+    background-color: whitesmoke !important;
+    opacity: .8;
+}
+.breadcumbs nav ol li a {
+    color: #353535;
+}
+
+.main-news-list-section .new_list_by_cat_m_recent {
+    padding-top: 10px;
+}
+
+.main-news-list-section {
+    background-color: whitesmoke;
+}
+
+.main-news-list-section .news_list_by_cat .media {
+    background: white !important;
+}

@@ -1,0 +1,172 @@
+{% extends 'back-end/admin_panel/index.html' %}
+{% load static %}
+
+{% block main-block %}
+
+
+<!-- begin app-main -->
+<div class="app-main" id="main">
+    <!-- begin container-fluid -->
+    <div class="container-fluid">
+        <!-- begin row -->
+
+        <!--            django message framework-->
+        <div class="row">
+            <div class="col-xl-3"></div>
+            <div class="col-xl-6">
+                {% if messages %}
+                {% for message in messages %}
+
+                <div {% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissible fade show" {% endif %} role="alert">
+                    <strong>{{ message }}!</strong>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                {% endfor %}
+                {% endif %}
+            </div>
+            <div class="col-xl-3"></div>
+        </div>
+        <!--            django message framework ends-->
+
+        <!-- begin row -->
+        <div class="row">
+            <div class="col-md-12 m-b-30">
+                <!-- begin page title -->
+                <div class="d-block d-sm-flex flex-nowrap align-items-center">
+                    <div class="page-title mb-2 mb-sm-0">
+                        <h1>News List</h1> <span style="text-decoration: underline;"><a href="/ap/add/news"><strong>Go to:</strong> Add News</a></span>
+                    </div>
+                    <div class="ml-auto d-flex align-items-center">
+                        <nav>
+                            <ol class="breadcrumb p-0 m-b-0">
+                                <li class="breadcrumb-item">
+                                    <a href="index.html"><i class="ti ti-home"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    News
+                                </li>
+                                <li class="breadcrumb-item active text-primary" aria-current="page">News List</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+                <!-- end page title -->
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- begin row -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card card-statistics">
+                    <div class="card-body">
+                        <div class="datatable-wrapper table-responsive">
+                            <table id="datatable" class="display compact table table-striped table-bordered">
+                                <thead>
+                                <tr>
+                                    <th class="text-center">ID</th>
+                                    <th class="text-center">Name</th>
+                                    <th class="text-center">Email</th>
+                                    <th class="text-center">Phone</th>
+                                    <th class="text-center">Message</th>
+                                    <th class="text-center">Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% if msg_list %}
+                                {% for msg in msg_list %}
+                                <tr>
+                                    <td class="text-center">55d{{msg.pk}}as232lks</td>
+                                    <td class="text-center">{{msg.name}}</td>
+                                    <td class="text-center">{{msg.email}}</td>
+                                    <td class="text-center">{{msg.phone}}</td>
+                                    <td class="text-center">{{msg.msg}}</td>
+                                    <td class="text-center">
+                                        <!--                                        delete modal-->
+
+                                        <button type="button" data-toggle="modal"
+                                                data-target="#deletemsg_{{msg.pk}}"
+                                                style="width: auto; border: none; cursor: pointer; outline: none;background:   #FF0000; color: white;">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+
+
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="deletemsg_{{msg.pk}}" tabindex="-1"
+                                             role="dialog"
+                                             aria-labelledby="deletemsg_{{msg.pk}}" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <p class="modal-title" id="exampleModalLabel">Are you confirm to
+                                                            delete this news?</p>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                                data-dismiss="modal">No
+                                                        </button>
+                                                        <a href="{% url 'apDelVisitorMsg' pk=msg.pk %}">
+                                                            <button type="button" class="btn btn-primary">Yes</button>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!--                                        delete modal ends-->
+
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                {% else %}
+                                <h3>No Message found!</h3>
+                                {% endif %}
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+    </div>
+    <!-- end container-fluid -->
+</div>
+
+<script>
+
+function changeNewsPublishStatus(element){
+
+element.onchange= (event)=>{
+
+
+$.ajax({
+
+url: 'http://127.0.0.1:8000/ap/news/list/',
+type: 'get',
+data: {
+   news_status: event.target.value,
+},
+success: function(response){
+    location.reload();
+},
+
+});
+
+
+}
+}
+</script>
+
+
+<!-- end app-main -->
+{% endblock %}
